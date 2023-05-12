@@ -18,6 +18,11 @@
     "emitDecoratorMetadata": true, // TypeGraphQL required
     "experimentalDecorators": true // TypeGraphQL required
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/api/auth/[...auth0].js"
+  ],
   "exclude": ["node_modules"]
 }

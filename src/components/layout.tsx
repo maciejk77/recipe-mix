@@ -1,14 +1,13 @@
 import { FunctionComponent, ReactNode } from "react";
 import Link from "next/link";
-// import { useAuth } from "src/auth/useAuth";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface IProps {
   main: ReactNode;
 }
 
 const Layout: FunctionComponent<IProps> = ({ main }) => {
-  const authenticated = false;
-  const logout = () => null;
+  const { user, error, isLoading } = useUser();
 
   return (
     <div className="bg-gray-400 max-w-screen-2xl mx-auto text-white">
@@ -23,16 +22,18 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               />
             </a>
           </Link>
-          {authenticated ? (
+          {user ? (
             <>
               <Link href="/recipes/add">
                 <a>Add Recipe</a>
               </Link>
-              <button onClick={logout}>Logout</button>
+              <Link href="/api/auth/logout">
+                <a>Logout</a>
+              </Link>
             </>
           ) : (
-            <Link href="/auth">
-              <a>Login | Signup</a>
+            <Link href="/api/auth/login">
+              <a>Login</a>
             </Link>
           )}
         </div>
