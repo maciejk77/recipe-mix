@@ -4,7 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": false,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": true, // doesn't allow for default any types in TS
     "strictPropertyInitialization": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
@@ -14,9 +14,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "baseUrl": ".",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "baseUrl": ".", // to be able to use 'src/' paths when importing
+    "emitDecoratorMetadata": true, // TypeGraphQL required
+    "experimentalDecorators": true // TypeGraphQL required
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
