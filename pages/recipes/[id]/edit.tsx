@@ -3,7 +3,7 @@
 // import { useQuery, gql } from "@apollo/client";
 // import { loadIdToken } from "src/auth/firebaseAdmin";
 // import Layout from "src/components/layout";
-// import RecipiesForm from "src/components/RecipiesForm";
+// import RecipesForm from "src/components/RecipesForm";
 // import { useAuth } from "src/auth/useAuth";
 // import {
 //   EditRecipeQuery,
