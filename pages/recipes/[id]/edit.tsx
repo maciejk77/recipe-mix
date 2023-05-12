@@ -3,13 +3,13 @@
 // import { useQuery, gql } from "@apollo/client";
 // import { loadIdToken } from "src/auth/firebaseAdmin";
 // import Layout from "src/components/layout";
-// import HouseForm from "src/components/houseForm";
+// import RecipiesForm from "src/components/RecipiesForm";
 // import { useAuth } from "src/auth/useAuth";
 // import {
-//   EditHouseQuery,
-//   EditHouseQueryVariables,
-// } from "src/generated/EditHouseQuery";
+//   EditRecipeQuery,
+//   EditRecipeQueryVariables,
+// } from "src/generated/EditRecipeQuery";
 
-export default function EditHouse() {
-  return <div>EditHouse</div>;
+export default function EditRecipe() {
+  return <div>EditRecipe</div>;
 }
