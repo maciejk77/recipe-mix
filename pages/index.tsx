@@ -2,10 +2,10 @@
 // import { useQuery, gql } from "@apollo/client";
 // import { useDebounce } from "use-debounce";
 // import Layout from "src/components/layout";
-// import RecipiesList from "src/components/recipiesList";
+// import RecipesList from "src/components/recipesList";
 // import { useLastData } from "src/utils/useLastData";
 // import { useLocalState } from "src/utils/useLocalState";
-// import { RecipesQuery, RecipiesQueryVariables } from "src/generated/RecipiesQuery";
+// import { RecipesQuery, RecipesQueryVariables } from "src/generated/RecipesQuery";
 
 export default function Home() {
   return <div>Home</div>;
