@@ -10,8 +10,8 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
   const { user, error, isLoading } = useUser();
 
   return (
-    <div className="bg-gray-400 max-w-screen-2xl mx-auto text-white">
-      <nav className="bg-gray-600" style={{ height: "64px" }}>
+    <div className="bg-green-500 text-white max-w-screen-2xl mx-auto">
+      <nav className="bg-black text-white" style={{ height: "64px" }}>
         <div className="px-3 flex items-center justify-between h-16">
           <Link href="/">
             <a>
@@ -33,12 +33,12 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
             </>
           ) : (
             <Link href="/api/auth/login">
-              <a>Login</a>
+              <a>Login | Sign up</a>
             </Link>
           )}
         </div>
       </nav>
-      <main style={{ minHeight: "calc(100vh-64px)" }}>{main}</main>
+      <main style={{ minHeight: "calc(100vh - 64px)" }}>{main}</main>
     </div>
   );
 };
