@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
-// import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 // import { useRouter } from "next/router";
 // import Link from "next/link";
 // import { Image } from "cloudinary-react";
@@ -14,7 +14,41 @@ import { useForm } from "react-hook-form";
 //   UpdateRecipeMutation,
 //   UpdateRecipeMutationVariables,
 // } from "src/generated/UpdateRecipeMutation";
-// import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
+import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
+
+// import { useUser } from "@auth0/nextjs-auth0/client";
+
+const SIGNATURE_MUTATION = gql`
+  mutation CreateSignatureMutation {
+    createImageSignature {
+      signature
+      timestamp
+    }
+  }
+`;
+
+interface IUploadImageResponse {
+  secure_url: string;
+}
+
+const uploadImage = async (
+  image: File,
+  signature: string,
+  timestamp: number
+): Promise<IUploadImageResponse> => {
+  const url = `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+  const formData = new FormData();
+  formData.append("file", image);
+  formData.append("signature", signature);
+  formData.append("timestamp", timestamp.toString());
+  formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY ?? "");
+
+  const response = await fetch(url, {
+    method: "post",
+    body: formData,
+  });
+  return response.json();
+};
 
 interface IFormData {
   recipeName: string;
@@ -31,6 +65,12 @@ export default function RecipeForm({}: IProps) {
   const { register, handleSubmit, setValue, errors, watch } = useForm<
     IFormData
   >({ defaultValues: {} });
+  const [createSignature] = useMutation<CreateSignatureMutation>(
+    SIGNATURE_MUTATION
+  );
+
+  // const { user } = useUser();
+  // console.log("user: ", user);
 
   useEffect(() => {
     register({ name: "recipeName" }, { required: "Please enter recipe name" });
@@ -38,11 +78,16 @@ export default function RecipeForm({}: IProps) {
     register({ name: "ingredients" }, { required: "Please enter ingredients" });
   }, []);
 
-  const handleCreate = async (data: IFormData) => {};
+  const handleCreate = async (data: IFormData) => {
+    const { data: signatureData } = await createSignature();
+    if (signatureData) {
+      const { signature, timestamp } = signatureData.createImageSignature;
+      const imageData = await uploadImage(data.image[0], signature, timestamp);
+    }
+  };
 
   const onSubmit = (data: IFormData) => {
     setSubmitting(true);
-    console.log("DATA: ", data);
     handleCreate(data);
   };
 
