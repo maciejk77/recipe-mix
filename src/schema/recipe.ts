@@ -58,6 +58,13 @@ class Recipe {
 
 @Resolver()
 export class RecipeResolver {
+  @Query((_returns) => Recipe, { nullable: true })
+  async recipe(@Arg("id") id: string, @Ctx() ctx: Context) {
+    return await ctx.prisma.recipe.findUnique({
+      where: { id: parseInt(id, 10) },
+    });
+  }
+
   @Authorized()
   @Mutation((_returns) => Recipe, { nullable: true })
   async createRecipe(
