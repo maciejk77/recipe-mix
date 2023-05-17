@@ -7,6 +7,13 @@
 // START Enums and Input Objects
 //==============================================================
 
+export interface RecipeInput {
+  cuisine: string;
+  image: string;
+  ingredients: string;
+  recipeName: string;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

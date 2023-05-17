@@ -5,6 +5,6 @@ export interface Context {
   prisma: PrismaClient;
 }
 
-export interface AuthorisedContext extends Context {
+export interface AuthorizedContext extends Context {
   uid: string;
 }

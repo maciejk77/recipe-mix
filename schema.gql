@@ -10,8 +10,26 @@ type ImageSignature {
 
 type Mutation {
   createImageSignature: ImageSignature!
+  createRecipe(input: RecipeInput!): Recipe
 }
 
 type Query {
   hello: String!
+}
+
+type Recipe {
+  cuisine: String!
+  id: ID!
+  image: String!
+  ingredients: String!
+  publicId: String!
+  recipeName: String!
+  userId: String!
+}
+
+input RecipeInput {
+  cuisine: String!
+  image: String!
+  ingredients: String!
+  recipeName: String!
 }

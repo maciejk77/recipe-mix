@@ -2,14 +2,14 @@ import Link from "next/link";
 import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, gql } from "@apollo/client";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 // import Link from "next/link";
 // import { Image } from "cloudinary-react";
 // import { SearchBox } from "./searchBox";
-// import {
-//   CreateRecipeMutation,
-//   CreateRecipeMutationVariables,
-// } from "src/generated/CreateRecipeMutation";
+import {
+  CreateRecipeMutation,
+  CreateRecipeMutationVariables,
+} from "src/generated/CreateRecipeMutation";
 // import {
 //   UpdateRecipeMutation,
 //   UpdateRecipeMutationVariables,
@@ -27,6 +27,14 @@ const SIGNATURE_MUTATION = gql`
   }
 `;
 
+const CREATE_RECIPE_MUTATION = gql`
+  mutation CreateRecipeMutation($input: RecipeInput!) {
+    createRecipe(input: $input) {
+      id
+    }
+  }
+`;
+
 interface IUploadImageResponse {
   secure_url: string;
 }
@@ -36,7 +44,7 @@ const uploadImage = async (
   signature: string,
   timestamp: number
 ): Promise<IUploadImageResponse> => {
-  const url = `https://api.cloudinary.com/v1_1/${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
   const formData = new FormData();
   formData.append("file", image);
   formData.append("signature", signature);
@@ -60,6 +68,7 @@ interface IFormData {
 interface IProps {}
 
 export default function RecipeForm({}: IProps) {
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const { register, handleSubmit, setValue, errors, watch } = useForm<
@@ -71,6 +80,10 @@ export default function RecipeForm({}: IProps) {
 
   // const { user } = useUser();
   // console.log("user: ", user);
+  const [createRecipe] = useMutation<
+    CreateRecipeMutation,
+    CreateRecipeMutationVariables
+  >(CREATE_RECIPE_MUTATION);
 
   useEffect(() => {
     register({ name: "recipeName" }, { required: "Please enter recipe name" });
@@ -83,11 +96,31 @@ export default function RecipeForm({}: IProps) {
     if (signatureData) {
       const { signature, timestamp } = signatureData.createImageSignature;
       const imageData = await uploadImage(data.image[0], signature, timestamp);
+
+      const { data: recipeData } = await createRecipe({
+        variables: {
+          input: {
+            image: imageData.secure_url,
+            cuisine: data.cuisine,
+            recipeName: data.recipeName,
+            ingredients: data.ingredients,
+          },
+        },
+      });
+
+      console.log("recipeData: ", recipeData);
+
+      if (recipeData?.createRecipe) {
+        router.push(`/recipes/${recipeData.createRecipe.id}`);
+      } else {
+        console.log("There was problem with creating recipe on DB");
+      }
     }
   };
 
   const onSubmit = (data: IFormData) => {
     setSubmitting(true);
+    console.log("DATA: ", data);
     handleCreate(data);
   };
 
