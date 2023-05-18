@@ -1,19 +1,17 @@
-import Link from "next/link";
 import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-// import Link from "next/link";
-// import { Image } from "cloudinary-react";
-// import { SearchBox } from "./searchBox";
+import Link from "next/link";
+import { Image } from "cloudinary-react";
 import {
   CreateRecipeMutation,
   CreateRecipeMutationVariables,
 } from "src/generated/CreateRecipeMutation";
-// import {
-//   UpdateRecipeMutation,
-//   UpdateRecipeMutationVariables,
-// } from "src/generated/UpdateRecipeMutation";
+import {
+  UpdateRecipeMutation,
+  UpdateRecipeMutationVariables,
+} from "src/generated/UpdateRecipeMutation";
 import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
 
 // import { useUser } from "@auth0/nextjs-auth0/client";
@@ -31,6 +29,19 @@ const CREATE_RECIPE_MUTATION = gql`
   mutation CreateRecipeMutation($input: RecipeInput!) {
     createRecipe(input: $input) {
       id
+    }
+  }
+`;
+
+const UPDATE_RECIPE_MUTATION = gql`
+  mutation UpdateRecipeMutation($id: String!, $input: RecipeInput!) {
+    updateRecipe(id: $id, input: $input) {
+      id
+      publicId
+      image
+      recipeName
+      cuisine
+      ingredients
     }
   }
 `;
@@ -65,25 +76,47 @@ interface IFormData {
   image: FileList;
 }
 
-interface IProps {}
+interface IRecipe {
+  id: string;
+  image: string;
+  publicId: string;
+  recipeName: string;
+  cuisine: string;
+  ingredients: string;
+}
 
-export default function RecipeForm({}: IProps) {
+interface IProps {
+  recipe?: IRecipe | null;
+}
+
+export default function RecipeForm({ recipe }: IProps) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const { register, handleSubmit, setValue, errors, watch } = useForm<
     IFormData
-  >({ defaultValues: {} });
+  >({
+    defaultValues: recipe
+      ? {
+          recipeName: recipe.recipeName,
+          cuisine: recipe.cuisine,
+          ingredients: recipe.ingredients,
+        }
+      : {},
+  });
   const [createSignature] = useMutation<CreateSignatureMutation>(
     SIGNATURE_MUTATION
   );
 
-  // const { user } = useUser();
-  // console.log("user: ", user);
   const [createRecipe] = useMutation<
     CreateRecipeMutation,
     CreateRecipeMutationVariables
   >(CREATE_RECIPE_MUTATION);
+
+  const [updateRecipe] = useMutation<
+    UpdateRecipeMutation,
+    UpdateRecipeMutationVariables
+  >(UPDATE_RECIPE_MUTATION);
 
   useEffect(() => {
     register({ name: "recipeName" }, { required: "Please enter recipe name" });
@@ -108,8 +141,6 @@ export default function RecipeForm({}: IProps) {
         },
       });
 
-      console.log("recipeData: ", recipeData);
-
       if (recipeData?.createRecipe) {
         router.push(`/recipes/${recipeData.createRecipe.id}`);
       } else {
@@ -118,15 +149,52 @@ export default function RecipeForm({}: IProps) {
     }
   };
 
+  const handleUpdate = async (currentRecipe: IRecipe, data: IFormData) => {
+    let image = currentRecipe.image;
+
+    if (data.image[0]) {
+      const { data: signatureData } = await createSignature();
+      if (signatureData) {
+        const { signature, timestamp } = signatureData.createImageSignature;
+        const imageData = await uploadImage(
+          data.image[0],
+          signature,
+          timestamp
+        );
+        image = imageData.secure_url;
+      }
+    }
+
+    const { data: recipeData } = await updateRecipe({
+      variables: {
+        id: currentRecipe.id,
+        input: {
+          image: image,
+          recipeName: data.recipeName,
+          cuisine: data.cuisine,
+          ingredients: data.ingredients,
+        },
+      },
+    });
+
+    if (recipeData?.updateRecipe) {
+      router.push(`/recipes/${currentRecipe.id}`);
+    }
+  };
+
   const onSubmit = (data: IFormData) => {
     setSubmitting(true);
-    console.log("DATA: ", data);
-    handleCreate(data);
+
+    if (!!recipe) {
+      handleUpdate(recipe, data);
+    } else {
+      handleCreate(data);
+    }
   };
 
   return (
     <form className="mx-auto max-w-xl py-4" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="text-xl">Add a New Recipe</h1>
+      <h1 className="text-xl">{recipe ? "Edit" : "Add"} Recipe</h1>
       <div className="mt-4">
         <label
           htmlFor="image"
@@ -142,7 +210,7 @@ export default function RecipeForm({}: IProps) {
           style={{ display: "none" }}
           ref={register({
             validate: (fileList: FileList) => {
-              if (fileList.length > 0) return true;
+              if (recipe || fileList.length === 1) return true;
               return "Please upload one file";
             },
           })}
@@ -157,14 +225,28 @@ export default function RecipeForm({}: IProps) {
             }
           }}
         />
-        {previewImage && (
+        {previewImage ? (
           <img
             src={previewImage}
             alt="recipe image"
             className="mt-4 object-cover border border-white"
             style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
           />
-        )}
+        ) : recipe ? (
+          <Image
+            className="mt-4"
+            cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+            publicId={recipe.publicId}
+            alt={recipe.recipeName}
+            secure
+            dpr="auto"
+            quality="auto"
+            width={576}
+            height={Math.floor((9 / 16) * 576)}
+            crop="fill"
+            gravity="auto"
+          />
+        ) : null}
         <div className="text-red-500 py-2">
           {errors.image && <p>{errors.image.message}</p>}
         </div>
@@ -231,7 +313,7 @@ export default function RecipeForm({}: IProps) {
         >
           Save Recipe
         </button>
-        <Link href="/">
+        <Link href={recipe ? `/recipes/${recipe.id}` : "/"}>
           <a>Cancel</a>
         </Link>
       </div>

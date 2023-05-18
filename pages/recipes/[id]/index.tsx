@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { Image } from "cloudinary-react";
 import { useQuery, gql } from "@apollo/client";
 import Layout from "src/components/layout";
-// import RecipeNav from "src/components/recipeNav";
+import RecipeNav from "src/components/recipeNav";
 import {
   ShowRecipeQuery,
   ShowRecipeQueryVariables,
@@ -57,6 +57,7 @@ const RecipeData = ({ id }) => {
       main={
         <div className="sm:block md:flex">
           <div className="sm:w-full md:w-1/2 p-4">
+            <RecipeNav recipe={recipe} />
             <h1 className="text-3xl my-2">{recipe.recipeName}</h1>
 
             <Image
@@ -74,8 +75,10 @@ const RecipeData = ({ id }) => {
             />
             <h2 className="text-2xl my-2">{recipe.cuisine}</h2>
             <ul>
-              {ingredientsList.map((ing) => (
-                <li className="text-xl my-1">{ing}</li>
+              {ingredientsList.map((ing, index) => (
+                <li key={index} className="text-xl my-1">
+                  {ing}
+                </li>
               ))}
             </ul>
           </div>

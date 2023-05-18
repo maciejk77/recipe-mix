@@ -11,6 +11,7 @@ type ImageSignature {
 type Mutation {
   createImageSignature: ImageSignature!
   createRecipe(input: RecipeInput!): Recipe
+  updateRecipe(id: String!, input: RecipeInput!): Recipe
 }
 
 type Query {

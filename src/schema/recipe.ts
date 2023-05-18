@@ -63,6 +63,8 @@ export class RecipeResolver {
     return await ctx.prisma.recipe.findUnique({
       where: { id: parseInt(id, 10) },
     });
+
+    // @Query add here to return all/many recipes? // TODO
   }
 
   @Authorized()
@@ -74,6 +76,32 @@ export class RecipeResolver {
     return await ctx.prisma.recipe.create({
       data: {
         userId: ctx.uid,
+        image: input.image,
+        recipeName: input.recipeName,
+        cuisine: input.cuisine,
+        ingredients: input.ingredients,
+      },
+    });
+  }
+
+  @Authorized()
+  @Mutation((_returns) => Recipe, { nullable: true })
+  async updateRecipe(
+    @Arg("id") id: string,
+    @Arg("input") input: RecipeInput,
+    @Ctx() ctx: AuthorizedContext
+  ) {
+    const recipeId = parseInt(id, 10);
+    const recipe = await ctx.prisma.recipe.findUnique({
+      where: { id: recipeId },
+    });
+
+    // anyone can edit atm
+    // if (!recipe || recipe.userId !== ctx.uid) return null; // TODO
+
+    return await ctx.prisma.recipe.update({
+      where: { id: recipeId },
+      data: {
         image: input.image,
         recipeName: input.recipeName,
         cuisine: input.cuisine,
