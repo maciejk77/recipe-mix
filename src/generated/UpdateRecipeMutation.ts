@@ -24,6 +24,6 @@ export interface UpdateRecipeMutation {
 }
 
 export interface UpdateRecipeMutationVariables {
-  id?: string | null;
+  id: string;
   input: RecipeInput;
 }

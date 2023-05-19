@@ -109,4 +109,21 @@ export class RecipeResolver {
       },
     });
   }
+
+  @Authorized()
+  @Mutation((_returns) => Boolean, { nullable: false })
+  async deleteRecipe(
+    @Arg("id") id: string,
+    @Ctx() ctx: AuthorizedContext
+  ): Promise<boolean> {
+    const recipeId = parseInt(id, 10);
+    const recipe = await ctx.prisma.recipe.findUnique({
+      where: { id: recipeId },
+    });
+
+    if (!recipe || recipe.userId !== ctx.uid) return false; // TODO fix userId logic?
+
+    await ctx.prisma.recipe.delete({ where: { id: recipeId } });
+    return true;
+  }
 }
