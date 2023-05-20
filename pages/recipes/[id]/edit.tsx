@@ -44,10 +44,14 @@ export const RecipeData = ({ id }: IRecipeProps) => {
     { variables: { id } }
   );
 
-  if (!user) return <Layout main={<div>Please login</div>} />;
-  if (loading) return <Layout main={<div>Loading...</div>} />;
+  if (!user)
+    return <Layout main={<div className="text-black">Please login</div>} />;
+  if (loading)
+    return <Layout main={<div className="text-black">Loading...</div>} />;
   if (data && !data.recipe)
-    return <Layout main={<div>Unable to load house</div>} />;
+    return (
+      <Layout main={<div className="text-black">Unable to load house</div>} />
+    );
   // if (user.uid !== data?.recipe?.userId) // TODO
   if (false) return <Layout main={<div>You don't have permission</div>} />;
 

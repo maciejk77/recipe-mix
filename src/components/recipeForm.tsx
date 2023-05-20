@@ -193,7 +193,10 @@ export default function RecipeForm({ recipe }: IProps) {
   };
 
   return (
-    <form className="mx-auto max-w-xl py-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="mx-auto max-w-xl py-4 text-black"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <h1 className="text-xl">{recipe ? "Edit" : "Add"} Recipe</h1>
       <div className="mt-4">
         <label
@@ -309,12 +312,12 @@ export default function RecipeForm({ recipe }: IProps) {
         <button
           type="submit"
           disabled={submitting}
-          className="bg-red-800 hover:bg-red-700 px-4 py-2 mt-4 mb-12"
+          className="bg-red-800 hover:bg-red-700 px-4 py-2 mt-4 mb-12 text-white"
         >
           Save Recipe
         </button>
         <Link href={recipe ? `/recipes/${recipe.id}` : "/"}>
-          <a>Cancel</a>
+          <a className="text-white">Cancel</a>
         </Link>
       </div>
     </form>

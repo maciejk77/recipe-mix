@@ -67,6 +67,11 @@ export class RecipeResolver {
     // @Query add here to return all/many recipes? // TODO
   }
 
+  @Query((_returns) => [Recipe], { nullable: true })
+  async recipes(@Ctx() ctx: Context) {
+    return await ctx.prisma.recipe.findMany();
+  }
+
   @Authorized()
   @Mutation((_returns) => Recipe, { nullable: true })
   async createRecipe(

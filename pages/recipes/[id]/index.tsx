@@ -42,9 +42,14 @@ const RecipeData = ({ id }) => {
     { variables: { id } }
   );
 
-  if (loading || !data) return <Layout main={<div>Loading...</div>} />;
+  if (loading || !data)
+    return <Layout main={<div className="text-black">Loading...</div>} />;
   if (!data.recipe)
-    return <Layout main={<div>No recipe found of id: {id}</div>} />;
+    return (
+      <Layout
+        main={<div className="text-black">No recipe found for id: {id}</div>}
+      />
+    );
 
   const { recipe } = data;
 
@@ -55,7 +60,7 @@ const RecipeData = ({ id }) => {
   return (
     <Layout
       main={
-        <div className="sm:block md:flex">
+        <div className="sm:block md:flex text-black">
           <div className="sm:w-full md:w-1/2 p-4">
             <RecipeNav recipe={recipe} />
             <h1 className="text-3xl my-2">{recipe.recipeName}</h1>
