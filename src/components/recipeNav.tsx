@@ -22,10 +22,9 @@ interface IProps {
 
 export default function RecipeNav({ recipe }: IProps) {
   const router = useRouter();
-  // const { user, error, isLoading } = useUser();
+  const { user } = useUser();
 
-  // const canManage = !!user && user.sid === recipe.userId;
-  const canManage = true; // TODO
+  const canManage = !!user && user.sid === recipe.userId;
 
   const [deleteRecipe, { loading }] = useMutation<
     DeleteRecipeMutation,

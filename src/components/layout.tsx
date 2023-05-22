@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const Layout: FunctionComponent<IProps> = ({ main }) => {
-  const { user, error, isLoading } = useUser();
+  const { user } = useUser();
 
   return (
     <div className="bg-green-500 text-white max-w-screen-2xl mx-auto">
@@ -24,9 +24,20 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
           </Link>
           {user ? (
             <>
-              <Link href="/recipes/add">
-                <a>Add Recipe</a>
-              </Link>
+              <div>
+                <Link href="/">
+                  <a>Home</a>
+                </Link>
+                {" | "}
+                <Link href="/recipes">
+                  <a>Recipes</a>
+                </Link>
+                {" | "}
+                <Link href="/recipes/add">
+                  <a>Add Recipe</a>
+                </Link>
+              </div>
+
               <Link href="/api/auth/logout">
                 <a>Logout</a>
               </Link>

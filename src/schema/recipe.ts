@@ -63,8 +63,6 @@ export class RecipeResolver {
     return await ctx.prisma.recipe.findUnique({
       where: { id: parseInt(id, 10) },
     });
-
-    // @Query add here to return all/many recipes? // TODO
   }
 
   @Query((_returns) => [Recipe], { nullable: true })
@@ -101,8 +99,7 @@ export class RecipeResolver {
       where: { id: recipeId },
     });
 
-    // anyone can edit atm
-    // if (!recipe || recipe.userId !== ctx.uid) return null; // TODO
+    if (!recipe || recipe.userId !== ctx.uid) return null;
 
     return await ctx.prisma.recipe.update({
       where: { id: recipeId },
@@ -126,7 +123,7 @@ export class RecipeResolver {
       where: { id: recipeId },
     });
 
-    if (!recipe || recipe.userId !== ctx.uid) return false; // TODO fix userId logic?
+    if (!recipe || recipe.userId !== ctx.uid) return false;
 
     await ctx.prisma.recipe.delete({ where: { id: recipeId } });
     return true;
