@@ -14,7 +14,7 @@ A CRUD like app to aggregate recipes and enable user to collate weekly shopping 
 - CSS, Tailwind, Storybook (styling, components library)
 - React Testing Library, Cypress (testing)
 - Cloudinary (hosting images)
-- Auth0 (authentication)
+- NextAuth (authentication)
 - Vercel (deployment)
 - React Hook Form (forms library)
 - Semantic, accessible, responsive (general requirements)
