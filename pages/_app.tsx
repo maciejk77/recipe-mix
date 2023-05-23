@@ -1,16 +1,16 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { SessionProvider } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "src/apollo";
 import "../styles/index.css";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps, session }: AppProps) {
   const client = useApollo();
 
   return (
     <>
-      <UserProvider>
+      <SessionProvider session={session}>
         <ApolloProvider client={client}>
           <Head>
             <title>Recipe Mix | Weekly meals</title>
@@ -18,7 +18,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           </Head>
           <Component {...pageProps} />
         </ApolloProvider>
-      </UserProvider>
+      </SessionProvider>
     </>
   );
 }

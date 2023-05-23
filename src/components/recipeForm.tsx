@@ -14,8 +14,6 @@ import {
 } from "src/generated/UpdateRecipeMutation";
 import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
 
-// import { useUser } from "@auth0/nextjs-auth0/client";
-
 const SIGNATURE_MUTATION = gql`
   mutation CreateSignatureMutation {
     createImageSignature {

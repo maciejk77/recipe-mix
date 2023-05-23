@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Image } from "cloudinary-react";
-import { UseUser, useUser } from "@auth0/nextjs-auth0/dist/client/use-user";
 
 const RecipeList = ({ recipes }) => {
   if (!recipes.length)

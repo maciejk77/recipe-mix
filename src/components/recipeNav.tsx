@@ -5,7 +5,7 @@ import {
   DeleteRecipeMutation,
   DeleteRecipeMutationVariables,
 } from "src/generated/DeleteRecipeMutation";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useSession } from "next-auth/react";
 
 const DELETE_RECIPE_MUTATION = gql`
   mutation DeleteRecipeMutation($id: String!) {
@@ -21,10 +21,10 @@ interface IProps {
 }
 
 export default function RecipeNav({ recipe }: IProps) {
+  const { data: session } = useSession();
   const router = useRouter();
-  const { user } = useUser();
 
-  const canManage = !!user && user.sid === recipe.userId;
+  const canManage = !!session?.user && session.user.id === recipe.userId;
 
   const [deleteRecipe, { loading }] = useMutation<
     DeleteRecipeMutation,
@@ -33,10 +33,6 @@ export default function RecipeNav({ recipe }: IProps) {
 
   return (
     <>
-      <Link href="/">
-        <a>home</a>
-      </Link>
-      <> | </>
       {canManage && (
         <>
           <Link href={`/recipes/${recipe.id}/edit`}>

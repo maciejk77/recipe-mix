@@ -7,6 +7,7 @@ import {
   ShowRecipeQuery,
   ShowRecipeQueryVariables,
 } from "src/generated/ShowRecipeQuery";
+import { getSession } from "next-auth/react";
 
 const SHOW_RECIPE_QUERY = gql`
   query ShowRecipeQuery($id: String!) {
@@ -92,4 +93,20 @@ const RecipeData = ({ id }) => {
       }
     />
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 };
