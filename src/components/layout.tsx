@@ -23,7 +23,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               />
             </a>
           </Link>
-          {session?.user ? (
+          {session ? (
             <>
               <div>
                 <Link href="/">
