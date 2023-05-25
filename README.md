@@ -4,6 +4,10 @@ A CRUD like app to aggregate recipes and enable user to collate weekly shopping 
 
 ## Installation
 
+Clone project, run `yarn` in terminal
+Run `yarn dev` to start the project
+Visit `http://localhost:3000`
+
 ## Preview
 
 ## Tech stack
@@ -20,3 +24,26 @@ A CRUD like app to aggregate recipes and enable user to collate weekly shopping 
 - Semantic, accessible, responsive (general requirements)
 
 ## Notes
+
+If problems downgrade to Node 16.8.0 (use nvm)
+
+Add .env file with variables
+
+```
+CLOUDINARY_SECRET=""
+NEXT_PUBLIC_CLOUDINARY_KEY=""
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=""
+
+DATABASE_URL="postgresql://..."
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+NEXT_AUTH_URL=http://localhost:3000
+```
+
+(The below can be generated in command line `openssl rand -base64 32`)
+
+```
+JWT_SECRET=
+```
