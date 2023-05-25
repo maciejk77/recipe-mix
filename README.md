@@ -62,3 +62,7 @@ spurious results.
 
 Make sure there is just one graphql dependency and remove duplicate from packaga.json manually
 Delete node_modules and install again `rm -rf node_modules && yarn`
+
+## Screenshot
+
+<img src="https://github.com/maciejk77/recipe-mix/blob/master/public/assets/screenshot.png?raw=true" width="45%" height="45%" />
