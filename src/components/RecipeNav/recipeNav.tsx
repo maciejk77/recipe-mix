@@ -6,19 +6,8 @@ import {
   DeleteRecipeMutationVariables,
 } from "src/generated/DeleteRecipeMutation";
 import { useSession } from "next-auth/react";
-
-const DELETE_RECIPE_MUTATION = gql`
-  mutation DeleteRecipeMutation($id: String!) {
-    deleteRecipe(id: $id)
-  }
-`;
-
-interface IProps {
-  recipe: {
-    id: string;
-    userId: string;
-  };
-}
+import { IProps } from "./interfaces";
+import { DELETE_RECIPE_MUTATION } from "./graphql";
 
 export default function RecipeNav({ recipe }: IProps) {
   const { data: session } = useSession();
@@ -45,7 +34,7 @@ export default function RecipeNav({ recipe }: IProps) {
             onClick={async () => {
               if (confirm("Are you sure?")) {
                 await deleteRecipe({ variables: { id: recipe.id } });
-                router.push("/");
+                router.push("/recipes");
               }
             }}
           >

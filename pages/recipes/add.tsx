@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextApiRequest } from "next";
 import { useSession, getSession } from "next-auth/react";
-import Layout from "src/components/layout";
-import RecipeForm from "src/components/recipeForm";
+import Layout from "src/components/Layout/layout";
+import RecipeForm from "src/components/RecipeForm/recipeForm";
 
 export default function Add() {
   const { status } = useSession();

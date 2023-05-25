@@ -1,11 +1,8 @@
-import { FunctionComponent, ReactNode } from "react";
+import { FunctionComponent } from "react";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Image } from "cloudinary-react";
-
-interface IProps {
-  main: ReactNode;
-}
+import { IProps } from "./interfaces";
 
 const Layout: FunctionComponent<IProps> = ({ main }) => {
   const { data: session } = useSession();

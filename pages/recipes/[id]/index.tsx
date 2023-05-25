@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { Image } from "cloudinary-react";
 import { useQuery, gql } from "@apollo/client";
-import Layout from "src/components/layout";
-import RecipeNav from "src/components/recipeNav";
+import Layout from "src/components/Layout/layout";
+import RecipeNav from "src/components/RecipeNav/recipeNav";
 import {
   ShowRecipeQuery,
   ShowRecipeQueryVariables,

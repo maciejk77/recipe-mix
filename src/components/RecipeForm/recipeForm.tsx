@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
@@ -13,41 +13,14 @@ import {
   UpdateRecipeMutationVariables,
 } from "src/generated/UpdateRecipeMutation";
 import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
+import { IFormData, IRecipe, IProps, IUploadImageResponse } from "./interfaces";
+import {
+  SIGNATURE_MUTATION,
+  CREATE_RECIPE_MUTATION,
+  UPDATE_RECIPE_MUTATION,
+} from "./graphql";
 
-const SIGNATURE_MUTATION = gql`
-  mutation CreateSignatureMutation {
-    createImageSignature {
-      signature
-      timestamp
-    }
-  }
-`;
-
-const CREATE_RECIPE_MUTATION = gql`
-  mutation CreateRecipeMutation($input: RecipeInput!) {
-    createRecipe(input: $input) {
-      id
-    }
-  }
-`;
-
-const UPDATE_RECIPE_MUTATION = gql`
-  mutation UpdateRecipeMutation($id: String!, $input: RecipeInput!) {
-    updateRecipe(id: $id, input: $input) {
-      id
-      publicId
-      image
-      recipeName
-      cuisine
-      ingredients
-    }
-  }
-`;
-
-interface IUploadImageResponse {
-  secure_url: string;
-}
-
+// helpers
 const uploadImage = async (
   image: File,
   signature: string,
@@ -67,44 +40,29 @@ const uploadImage = async (
   return response.json();
 };
 
-interface IFormData {
-  recipeName: string;
-  cuisine: string;
-  ingredients: string;
-  image: FileList;
-}
-
-interface IRecipe {
-  id: string;
-  image: string;
-  publicId: string;
-  recipeName: string;
-  cuisine: string;
-  ingredients: string;
-}
-
-interface IProps {
-  recipe?: IRecipe | null;
-}
-
+// main component
 export default function RecipeForm({ recipe }: IProps) {
+  let recipeObject;
+
+  // hooks
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
-  const { register, handleSubmit, setValue, errors, watch } = useForm<
-    IFormData
-  >({
-    defaultValues: recipe
-      ? {
-          recipeName: recipe.recipeName,
-          cuisine: recipe.cuisine,
-          ingredients: recipe.ingredients,
-        }
-      : {},
-  });
-  const [createSignature] = useMutation<CreateSignatureMutation>(
-    SIGNATURE_MUTATION
-  );
+
+  useEffect(() => {
+    register({ name: "recipeName" }, { required: "Please enter recipe name" });
+    register({ name: "cuisine" }, { required: "Please enter cuisine name" });
+    register({ name: "ingredients" }, { required: "Please enter ingredients" });
+  }, []);
+
+  const { register, handleSubmit, setValue, errors, watch } =
+    useForm<IFormData>({
+      defaultValues: recipe ? recipeObject : {},
+    });
+
+  // apollo mutations
+  const [createSignature] =
+    useMutation<CreateSignatureMutation>(SIGNATURE_MUTATION);
 
   const [createRecipe] = useMutation<
     CreateRecipeMutation,
@@ -116,12 +74,13 @@ export default function RecipeForm({ recipe }: IProps) {
     UpdateRecipeMutationVariables
   >(UPDATE_RECIPE_MUTATION);
 
-  useEffect(() => {
-    register({ name: "recipeName" }, { required: "Please enter recipe name" });
-    register({ name: "cuisine" }, { required: "Please enter cuisine name" });
-    register({ name: "ingredients" }, { required: "Please enter ingredients" });
-  }, []);
+  recipeObject = {
+    recipeName: recipe?.recipeName,
+    cuisine: recipe?.cuisine,
+    ingredients: recipe?.ingredients,
+  };
 
+  // prisma functions
   const handleCreate = async (data: IFormData) => {
     const { data: signatureData } = await createSignature();
     if (signatureData) {
@@ -180,6 +139,7 @@ export default function RecipeForm({ recipe }: IProps) {
     }
   };
 
+  // handlers
   const onSubmit = (data: IFormData) => {
     setSubmitting(true);
 

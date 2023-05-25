@@ -1,8 +1,8 @@
 // import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
-import Layout from "src/components/layout";
-import RecipeForm from "src/components/recipeForm";
+import Layout from "src/components/Layout/layout";
+import RecipeForm from "src/components/RecipeForm/recipeForm";
 import {
   EditRecipeQuery,
   EditRecipeQueryVariables,

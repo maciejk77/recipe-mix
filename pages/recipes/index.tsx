@@ -1,8 +1,8 @@
 import { useQuery, gql } from "@apollo/client";
-import Layout from "src/components/layout";
-import RecipeList from "src/components/recipeList";
+import Layout from "src/components/Layout/layout";
+import RecipeList from "src/components/RecipeList/recipeList";
 import { RecipesQuery } from "src/generated/RecipesQuery";
-import { GetServerSideProps } from "next";
+// import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { Session } from "next-auth/core/types";
 
