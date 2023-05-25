@@ -4,9 +4,9 @@ A CRUD like app to aggregate recipes and enable user to collate weekly shopping 
 
 ## Installation
 
-Clone project, run `yarn` in terminal
-Run `yarn dev` to start the project
-Visit `http://localhost:3000`
+- Clone project, run `yarn` in terminal
+- Run `yarn dev` to start the project
+- Visit `http://localhost:3000`
 
 ## Preview
 
