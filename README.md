@@ -65,4 +65,4 @@ Delete node_modules and install again `rm -rf node_modules && yarn`
 
 ## Screenshot
 
-<img src="https://github.com/maciejk77/recipe-mix/blob/master/public/assets/screenshot.png?raw=true" width="45%" height="45%" />
+<img src="public/screenshot.png" width="400">
