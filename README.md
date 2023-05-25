@@ -65,4 +65,4 @@ Delete node_modules and install again `rm -rf node_modules && yarn`
 
 ## Screenshot
 
-<img src="public/screenshot.png" width="400">
+<img src="public/screenshot.png" width="800">
