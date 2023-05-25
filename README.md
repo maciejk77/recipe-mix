@@ -47,3 +47,18 @@ NEXT_AUTH_URL=http://localhost:3000
 ```
 JWT_SECRET=
 ```
+
+## Errors
+
+Error: Cannot find module '.prisma/client/index'
+
+Recreate prisma client `./node_modules/.bin/prisma2 generate`
+May need to delete node_modules and install again `rm -rf node_modules && yarn`
+
+Duplicate "graphql" modules cannot be used at the same time since different
+versions may have different capabilities and behavior. The data from one
+version used in the function from another could produce confusing and
+spurious results.
+
+Make sure there is just one graphql dependency and remove duplicate from packaga.json manually
+Delete node_modules and install again `rm -rf node_modules && yarn`
