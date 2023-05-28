@@ -255,7 +255,6 @@ export default function RecipeForm({ recipe }: IProps) {
         <textarea
           id="ingredients"
           name="ingredients"
-          type="text"
           placeholder="Type in a coma delimited list i.e. butter, rice, tomatoes"
           className="p-2 border border-green-600 text-md rounded-none w-full text-black"
           ref={register({
