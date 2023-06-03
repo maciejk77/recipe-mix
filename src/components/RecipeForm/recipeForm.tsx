@@ -42,8 +42,6 @@ const uploadImage = async (
 
 // main component
 export default function RecipeForm({ recipe }: IProps) {
-  let recipeObject;
-
   // hooks
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -57,7 +55,13 @@ export default function RecipeForm({ recipe }: IProps) {
 
   const { register, handleSubmit, setValue, errors, watch } =
     useForm<IFormData>({
-      defaultValues: recipe ? recipeObject : {},
+      defaultValues: recipe
+        ? {
+            recipeName: recipe?.recipeName,
+            cuisine: recipe?.cuisine,
+            ingredients: recipe?.ingredients,
+          }
+        : {},
     });
 
   // apollo mutations
@@ -73,12 +77,6 @@ export default function RecipeForm({ recipe }: IProps) {
     UpdateRecipeMutation,
     UpdateRecipeMutationVariables
   >(UPDATE_RECIPE_MUTATION);
-
-  recipeObject = {
-    recipeName: recipe?.recipeName,
-    cuisine: recipe?.cuisine,
-    ingredients: recipe?.ingredients,
-  };
 
   // prisma functions
   const handleCreate = async (data: IFormData) => {
