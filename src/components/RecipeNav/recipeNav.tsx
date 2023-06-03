@@ -5,15 +5,15 @@ import {
   DeleteRecipeMutation,
   DeleteRecipeMutationVariables,
 } from "src/generated/DeleteRecipeMutation";
-import { useSession } from "next-auth/react";
 import { IProps } from "./interfaces";
 import { DELETE_RECIPE_MUTATION } from "./graphql";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function RecipeNav({ recipe }: IProps) {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const router = useRouter();
 
-  const canManage = !!session?.user && session.user.id === recipe.userId;
+  const canManage = !!user && user.sub === recipe.userId;
 
   const [deleteRecipe, { loading }] = useMutation<
     DeleteRecipeMutation,

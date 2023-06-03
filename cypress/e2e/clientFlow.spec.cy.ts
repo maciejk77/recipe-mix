@@ -1,3 +1,5 @@
+// import { screen, fireEvent} from '@testing-library/react'
+
 describe("User NOT signed in", () => {
   beforeEach(() => {
     cy.visit("/");
@@ -11,37 +13,43 @@ describe("User NOT signed in", () => {
     cy.findByRole("button", { name: /sign in/i });
   });
 
-  it("should NOT display navigation options (Home|Recipes|Add Recipe)", () => {});
+  // it("should NOT display navigation options (Home|Recipes|Add Recipe)", () => {});
 
-  it("should NOT show the list of recipes", () => {});
+  // it("should NOT show the list of recipes", () => {});
 
-  it("should NOT show a chosen recipe information", () => {});
+  // it("should NOT show a chosen recipe information", () => {});
 });
 
 describe("User is signed in", () => {
-  it("should show welcome message", () => {});
+  beforeEach(() => {});
 
-  it("should show logout button", () => {});
+  it("should show welcome message", () => {
+    // cy.visit("/");
+    // cy.findByRole("button", { name: /sign in/i });
+    cy.findByText(/welcome/i);
+  });
 
-  it("should display navigation options (Home|Recipes|Add Recipe)", () => {});
+  // it("should show logout button", () => {});
 
-  it("should show the list of recipes", () => {});
+  // it("should display navigation options (Home|Recipes|Add Recipe)", () => {});
 
-  it("should show a chosen recipe information", () => {});
+  // it("should show the list of recipes", () => {});
 
-  it("should show (add|edit) options for user who created the recipe", () => {});
+  // it("should show a chosen recipe information", () => {});
 
-  it("should add the recipe to recipes on save", () => {});
+  // it("should show (add|edit) options for user who created the recipe", () => {});
 
-  it("should NOT add the recipe to recipes on save, if form not filled properly", () => {});
+  // it("should add the recipe to recipes on save", () => {});
 
-  it("should NOT add the recipe on cancel", () => {});
+  // it("should NOT add the recipe to recipes on save, if form not filled properly", () => {});
 
-  it("should allow editing a recipe for user who created it", () => {});
+  // it("should NOT add the recipe on cancel", () => {});
 
-  it("should NOT allow editing a recipe for user who NOT created it", () => {});
+  // it("should allow editing a recipe for user who created it", () => {});
 
-  it("should allow deleting recipe for user who created it", () => {});
+  // it("should NOT allow editing a recipe for user who NOT created it", () => {});
 
-  it("should NOT allow deleting recipe for user who NOT created it", () => {});
+  // it("should allow deleting recipe for user who created it", () => {});
+
+  // it("should NOT allow deleting recipe for user who NOT created it", () => {});
 });

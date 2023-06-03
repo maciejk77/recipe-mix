@@ -1,11 +1,11 @@
 import { FunctionComponent } from "react";
 import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
 import { Image } from "cloudinary-react";
 import { IProps } from "./interfaces";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Layout: FunctionComponent<IProps> = ({ main }) => {
-  const { data: session } = useSession();
+  const { user } = useUser();
 
   return (
     <div className="bg-green-500 text-white max-w-screen-2xl mx-auto">
@@ -20,7 +20,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               />
             </a>
           </Link>
-          {session ? (
+          {user ? (
             <>
               <div>
                 <Link href="/">
@@ -36,12 +36,13 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
                 </Link>
               </div>
 
-              <div className="flex">
-                <button className="pr-2" onClick={() => signOut()}>
-                  Logout
-                </button>
+              <div className="flex items-center">
+                <Link href="/api/auth/logout">
+                  <a className="pr-2">Logout</a>
+                </Link>
+
                 <Image
-                  src={session.user?.image}
+                  src={user.picture}
                   width={40}
                   height={40}
                   className="mr-2 rounded-3xl"
@@ -49,7 +50,9 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               </div>
             </>
           ) : (
-            <button onClick={() => signIn()}>Sign in</button>
+            <Link href="/api/auth/login">
+              <a>Login</a>
+            </Link>
           )}
         </div>
       </nav>

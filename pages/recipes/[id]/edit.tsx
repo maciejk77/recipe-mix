@@ -1,4 +1,4 @@
-// import { GetServerSideProps } from "next";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
 import Layout from "src/components/Layout/layout";
@@ -7,7 +7,8 @@ import {
   EditRecipeQuery,
   EditRecipeQueryVariables,
 } from "src/generated/EditRecipeQuery";
-import { getSession, useSession } from "next-auth/react";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 const EDIT_RECIPE_QUERY = gql`
   query EditRecipeQuery($id: String!) {
@@ -38,39 +39,25 @@ interface IRecipeProps {
 }
 
 export const RecipeData = ({ id }: IRecipeProps) => {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const { data, loading } = useQuery<EditRecipeQuery, EditRecipeQueryVariables>(
     EDIT_RECIPE_QUERY,
     { variables: { id } }
   );
 
-  if (!session) return null;
+  if (!user) return null;
 
   if (loading)
     return <Layout main={<div className="text-black">Loading...</div>} />;
   if (data && !data.recipe)
     return (
-      <Layout main={<div className="text-black">Unable to load house</div>} />
+      <Layout main={<div className="text-black">Unable to load recipe</div>} />
     );
 
-  if (session.user?.id !== data?.recipe?.userId)
+  if (user.sub !== data?.recipe?.userId)
     return <Layout main={<div>You don't have permission</div>} />;
 
   return <Layout main={<RecipeForm recipe={data?.recipe} />} />;
 };
 
-export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-      },
-    };
-  }
-
-  return {
-    props: { session },
-  };
-};
+export const getServerSideProps: GetServerSideProps = withPageAuthRequired();

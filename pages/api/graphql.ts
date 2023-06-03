@@ -5,7 +5,7 @@ import { schema } from "src/schema";
 import { Context } from "src/schema/context";
 import { prisma } from "src/prisma";
 import Cors from "micro-cors";
-import { getSession } from "next-auth/react";
+import decode from "jwt-decode";
 
 interface IContext {
   req: NextApiRequest;
@@ -16,10 +16,17 @@ const cors = Cors();
 const server = new ApolloServer({
   schema,
   context: async ({ req }: IContext): Promise<Context> => {
-    const session = await getSession({ req });
+    const token = req?.headers?.authorization?.split(" ")[1];
+
+    let uid = "";
+
+    if (token) {
+      const { sub }: { sub: string } = decode(token);
+      uid = sub;
+    }
 
     return {
-      uid: session?.user?.id,
+      uid,
       prisma,
     };
   },

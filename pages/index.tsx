@@ -1,15 +1,16 @@
 import Layout from "src/components/Layout/layout";
-import { useSession } from "next-auth/react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { user } = useUser();
+  // console.log("USER: ", user);
 
   return (
     <Layout
       main={
         <div className="text-black m-2">
-          {session ? (
-            <p>Welcome {session?.user?.name}</p>
+          {user ? (
+            <p>Welcome {user?.given_name}</p>
           ) : (
             <div>Please sign in above to get access</div>
           )}
