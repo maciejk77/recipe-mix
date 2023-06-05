@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Image } from "cloudinary-react";
 
 const RecipeList = ({ recipes }) => {
-  if (!recipes.length)
+  if (!recipes?.length)
     return <p className="text-black p-1 mx-2">No recipes available</p>;
 
   return (

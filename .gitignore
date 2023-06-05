@@ -33,3 +33,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# cypress testing
+src/auth_config.json
+cypress.env.json

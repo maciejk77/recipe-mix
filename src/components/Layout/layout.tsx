@@ -22,7 +22,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
           </Link>
           {user ? (
             <>
-              <div>
+              <div data-testid="nav-bar">
                 <Link href="/">
                   <a>Home</a>
                 </Link>

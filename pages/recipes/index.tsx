@@ -25,8 +25,6 @@ export default function Recipes() {
 
   if (loading) return <div className="text-black">Loading...</div>;
 
-  const { recipes } = data;
-
   return (
     <Layout
       main={
@@ -34,7 +32,7 @@ export default function Recipes() {
           {user && (
             <>
               <h1 className="text-3xl p-3 text-black">Recipes</h1>
-              <RecipeList recipes={recipes} />
+              <RecipeList recipes={data?.recipes} />
             </>
           )}
         </div>
